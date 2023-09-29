@@ -4,3 +4,4 @@ src/output_steam_games.json
 src/cleaned/csv/
 __pycache__/
 .env
+.venv/
