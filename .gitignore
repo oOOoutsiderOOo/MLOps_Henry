@@ -1,3 +1,4 @@
+consigna/
 src/australian_user_reviews.json
 src/australian_users_items.json
 src/output_steam_games.json
@@ -5,3 +6,4 @@ src/cleaned/csv/
 __pycache__/
 .env
 .venv/
+pysrc/
