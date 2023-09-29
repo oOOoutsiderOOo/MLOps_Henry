@@ -5,11 +5,10 @@ app = FastAPI()
 
 print("Cargando datos...")
 try:
-    # df_items = pd.read_parquet('./src/cleaned/items.parquet')
-    # df_reviews = pd.read_parquet('./src/cleaned/reviews.parquet')
-    # df_users = pd.read_parquet('./src/cleaned/users.parquet')
-    # df_games = pd.read_parquet('./src/cleaned/games.parquet')
-    df_reviews = pd.read_csv('./src/cleaned/reviews.csv')
+    df_items = pd.read_parquet('./src/cleaned/items.parquet')
+    df_reviews = pd.read_parquet('./src/cleaned/reviews.parquet')
+    df_users = pd.read_parquet('./src/cleaned/users.parquet')
+    df_games = pd.read_parquet('./src/cleaned/games.parquet')
 except Exception as error:
     print("Error al cargar los datos: ", error)
     
