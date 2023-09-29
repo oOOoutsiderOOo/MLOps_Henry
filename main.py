@@ -1,7 +1,12 @@
 from fastapi import FastAPI
+import pandas as pd
 
 app = FastAPI()
 
+df_items = pd.read_parquet('src/cleaned/items.parquet')
+df_reviews = pd.read_parquet('src/cleaned/reviews.parquet')
+df_users = pd.read_parquet('src/cleaned/users.parquet')
+df_games = pd.read_parquet('src/cleaned/games.parquet')
 
 @app.get("/")
 async def root():
@@ -36,8 +41,10 @@ def UsersNotRecommend( año : int):
   
 # Ejemplo de retorno: [{"Puesto 1" : X}, {"Puesto 2" : Y},{"Puesto 3" : Z}]
 
-def sentiment_analysis( año : int):
-    pass
+@app.get("/sentiment/{year}")
+def sentiment_analysis(year):
+    game_id_list = df_games[df_games['release_date'] == year]['id'].tolist()
+    return game_id_list
     # Según el año de lanzamiento, se devuelve una lista con la cantidad de registros de reseñas de usuarios que se encuentren categorizados con un análisis de sentimiento. 
 
 # Ejemplo de retorno: {Negative = 182, Neutral = 120, Positive = 278}
