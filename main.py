@@ -55,10 +55,25 @@ def UserForGenre(genre):
     df_items_of_genre = df_items_of_genre.drop(columns=['item_id', 'item_name'])
     df_items_of_genre = df_items_of_genre.groupby('user_id').sum().reset_index()
 
+    #Seleccionamos el usuario con más horas jugadas
     player = df_items_of_genre.sort_values(by=['playtime_forever'], ascending=False).head(1)['user_id'].values.tolist()[0]
-    hours = df_items_of_genre.sort_values(by=['playtime_forever'], ascending=False).head(1)['playtime_forever'].values.tolist()[0]
+    
+    #Creamos una tabla con los juegos , el año de lanzamiento y las horas jugadas
+    df_games_of_user = df_items.loc[(df_items['user_id'] == player) & (df_items['item_id'].isin(game_id_list))]
+    df_games_of_user = df_games_of_user.merge(df_games[['release_date', 'id']], left_on='item_id', right_on='id').drop(columns=['id', 'item_name', 'user_id', 'item_id'])
+    
+    #Agrupamos por año y sumamos las horas jugadas
+    df_games_of_user = df_games_of_user.groupby('release_date').sum().reset_index()
+    
+    #Ceamos una lista de diccionarios con el año y las horas jugadas
+    years_playtime = []
+    for i, j in df_games_of_user.iterrows():
+        year = j['release_date']
+        playtime = j['playtime_forever']
+        years_playtime.append({"Año": year, "Horas": playtime})
         
-    return {"Usuario con más horas jugadas para el género " + genre : player}
+    #Devolvemos el usuario con más horas jugadas y la lista de años y horas jugadas      
+    return ({"Usuario con más horas jugadas para el género " + genre : player}, {"Horas jugadas": eval(str(years_playtime))})
        
        
 @app.get("/recommended/{year}")
