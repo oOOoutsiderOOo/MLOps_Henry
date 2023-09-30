@@ -23,13 +23,34 @@ async def root():
 async def games():
     return {"message": "Games"}
 
-def PlayTimeGenre( genero : str):
+@app.get("/playTimeGenre/{genre}")
+def PlayTimeGenre( genre : str):
     """
     Debe devolver `año` con mas horas jugadas para dicho género.
   
     Ejemplo de retorno: {"Año con más horas jugadas para Género X" : 2013}
     """
-    pass
+        #Chequeamos que el género exista
+    if genre not in df_genres['url_genre'].values.tolist():
+        return {"Message": "El género no existe, la lista de géneros es: " + str(df_genres['url_genre'].values.tolist())}
+    
+    #Recuperamos el nombre formateado del género
+    genre = df_genres.loc[df_genres['url_genre'] == genre, 'genre'].values.tolist()[0]
+    
+    #Generamos una lista de todos los juegos del género
+    game_id_list = df_games.loc[df_games['genres'].str.contains(genre), 'id'].values.tolist()
+    
+    #Filtramos el dataframe de items para que solo contenga los juegos del género y combinamos con el dataframe de juegos para obtener el año de lanzamiento
+    df_items_of_genre = df_items.loc[df_items['item_id'].isin(game_id_list)]
+    df_items_of_genre = df_items_of_genre.merge(df_games[['release_date', 'id']], left_on='item_id', right_on='id').drop(columns=['id', 'item_name', 'user_id', 'item_id'])
+    
+    #Agrupamos por año y sumamos las horas jugadas
+    df_items_of_genre = df_items_of_genre.groupby('release_date').sum().reset_index()
+    
+    #Seleccionamos el año con más horas jugadas
+    year = df_items_of_genre.sort_values(by=['playtime_forever'], ascending=False).head(1)['release_date'].values.tolist()[0]
+    
+    return {"Año con más horas jugadas para Género " + genre : year}
 
 @app.get("/userForGenre/{genre}")
 def UserForGenre(genre):
