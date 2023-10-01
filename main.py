@@ -12,16 +12,12 @@ try:
     df_genres = pd.read_parquet('./src/cleaned/genres.parquet' , engine='fastparquet')
 except Exception as error:
     print("Error al cargar los datos: ", error)
-    
 print("Datos cargados.")
 
 @app.get("/")
 async def root():
     return {"message": "Hello World"}
 
-@app.get("/games")
-async def games():
-    return {"message": "Games"}
 
 @app.get("/playTimeGenre/{genre}")
 def PlayTimeGenre( genre : str):
@@ -32,7 +28,7 @@ def PlayTimeGenre( genre : str):
     """
         #Chequeamos que el género exista
     if genre not in df_genres['url_genre'].values.tolist():
-        return {"Message": "El género no existe, la lista de géneros es: " + str(df_genres['url_genre'].values.tolist())}
+        return {"Message": "El género ingresado no existe, la lista de géneros es: " + str(df_genres['url_genre'].values.tolist())}
     
     #Recuperamos el nombre formateado del género
     genre = df_genres.loc[df_genres['url_genre'] == genre, 'genre'].values.tolist()[0]
