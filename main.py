@@ -67,7 +67,7 @@ def PlayTimeGenre( genre : str):
     #Seleccionamos el año con más horas jugadas
     year = df_items_of_genre.sort_values(by=['playtime_forever'], ascending=False).head(1)['release_date'].values.tolist()[0]
     
-    return {"Año con más horas jugadas para Género " + genre : year}
+    return {"Año con más horas jugadas para género " + genre : year}
 
 @app.get("/userForGenre/{genre}")
 def UserForGenre(genre):
