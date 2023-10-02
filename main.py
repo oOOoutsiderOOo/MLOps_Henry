@@ -10,9 +10,12 @@ try:
     df_users = pd.read_parquet('./src/cleaned/users.parquet' , engine='fastparquet')
     df_games = pd.read_parquet('./src/cleaned/games.parquet' , engine='fastparquet')
     df_genres = pd.read_parquet('./src/cleaned/genres.parquet' , engine='fastparquet')
+    df_user_distance = pd.read_parquet('./src/cleaned/user_distance_matrix.parquet' , engine='fastparquet')
 except Exception as error:
     print("Error al cargar los datos: ", error)
 print("Datos cargados.")
+
+
 
 @app.get("/")
 async def root():
@@ -165,4 +168,32 @@ def sentiment_analysis(year):
     
     #Devolvemos un diccionario con las sumas
     return {"Negative" : negative, "Neutral" : neutral, "Positive" : positive}
+
+@app.get("/recommendByUser/{user}")
+def getRecommendations(user : str):
+    """
+    Devuelve el top 5 de juegos recomendados para el usuario dado.
+    """
+    
+    #Creamos una lista con los usuarios ordenados por similitud con el usuario dado. A la vez
+    #devolvemos un error si el usuario no existe
+    try:
+        user_list = df_user_distance[user].sort_values(ascending=True).head(100).index.tolist()
+        user_list.remove(user)
+    except:
+        return {"Message": "El usuario ingresado no existe, la lista de usuarios es: " + str(df_users['user_id'].values.tolist())}
+    
+    #Creamos un dataframe con los aproximadamente 100 juegos jugados por los usuarios más similares
+    games_list = set()
+    for user in user_list:
+        if len(games_list) > 100:
+            break
+        games_list.update(df_items.loc[df_items['user_id'] == user, 'item_id'].values.tolist())
+    
+    df_top_games = df_games.loc[df_games['id'].isin(games_list)]
+    
+    #Ordenamos por metascore y devolvemos el top 5   
+    top_games = df_top_games.sort_values(by=['metascore'], ascending=False).head(5)['title'].values.tolist()
+    
+    return {"Los 5 juegos recomendados para este usuario son:" :top_games}
     
