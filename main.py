@@ -16,7 +16,7 @@ print("Datos cargados.")
 
 @app.get("/")
 async def root():
-    return {"message": "Hello World"}
+    return {"message": "Bienvenido al trabajo Machine Learning Ops. Información sobre los endpoints de la API se encuentra en https://github.com/oOOoutsiderOOo/MLOps_Henry"}
 
 
 @app.get("/playTimeGenre/{genre}")
