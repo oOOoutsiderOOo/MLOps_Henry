@@ -7,7 +7,7 @@ El presente es es un proyecto para el bootcamp de Data Science de Henry. En ést
 
 ***
 
-### Deployement
+### Deployment
 
 El proyecto se encuentra desplegado en Railway, en el siguiente link:
 https://mlopshenry-production.up.railway.app/
