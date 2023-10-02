@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.responses import HTMLResponse
 import pandas as pd
 
 app = FastAPI()
@@ -17,9 +18,26 @@ print("Datos cargados.")
 
 
 
-@app.get("/")
+@app.get("/", response_class=HTMLResponse)
 async def root():
-    return {"message": "Bienvenido al trabajo Machine Learning Ops. Información sobre los endpoints de la API se encuentra en https://github.com/oOOoutsiderOOo/MLOps_Henry"}
+    return """
+    <html>
+        <head>
+            <title>Machine Learning Ops</title>
+            <link rel="preconnect" href="https://fonts.googleapis.com">
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+            <link href="https://fonts.googleapis.com/css2?family=Sen:wght@400;700&display=swap" rel="stylesheet">
+        </head>
+        <body style="background-color: #fafafa; display: flex; justify-content: center; align-items: center;">
+            <h1 style="font-family: 'Sen', sans-serif;">
+            Bienvenido al trabajo Machine Learning Ops! La información sobre los endpoints de la API se encuentra en 
+            <a href="https://github.com/oOOoutsiderOOo/MLOps_Henry">GitHub</a>
+            </h1>
+        </body>
+    </html>
+    """
+    
+    # return {"message": "Bienvenido al trabajo Machine Learning Ops. Información sobre los endpoints de la API se encuentra en https://github.com/oOOoutsiderOOo/MLOps_Henry"}
 
 
 @app.get("/playTimeGenre/{genre}")
@@ -105,7 +123,11 @@ def UsersRecommend(year):
     """
      
     #Generamos una lista de los primeros ids de juegos más recomendados para el año dado
-    year = int(year)
+    try:
+        year = int(year)
+    except:
+        return {"Message": "El año ingresado no es válido"}
+    
     top3_ids = df_reviews.loc[(df_reviews['posted'] == year) & (df_reviews['recommend'] == "True") & (df_reviews['sentiment_analysis'] > 0), 'item_id'].value_counts().head(3).to_dict()
     
     #Buscamos los nombres de los juegos en la lista de ids
@@ -129,7 +151,10 @@ def UsersRecommend(year):
     """
      
     #Generamos una lista de los primeros ids de juegos menos recomendados para el año dado
-    year = int(year)
+    try:
+        year = int(year)
+    except:
+        return {"Message": "El año ingresado no es válido"}
     top3_ids = df_reviews.loc[(df_reviews['posted'] == year) & (df_reviews['recommend'] == "False") & (df_reviews['sentiment_analysis'] == 0), 'item_id'].value_counts().head(3).to_dict()
     
     #Buscamos los nombres de los juegos en la lista de ids
@@ -153,7 +178,10 @@ def sentiment_analysis(year):
     """
     
     #Generamos una lista de todos los juegos lanzados en el año dado
-    year = int(year)
+    try:
+        year = int(year)
+    except:
+        return {"Message": "El año ingresado no es válido"}
     game_id_list = df_games[df_games['release_date'] == year]['id'].tolist()
 
     #Agregamos a una lista todos los análisis de sentimiento de cada juego
