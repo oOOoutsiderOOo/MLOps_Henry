@@ -50,11 +50,11 @@ Devuelve los juegos más recomendados para el usuario ingresado. Para ello prime
 Es importante aclarar que sólo se consideraron los usuarios que hayan escrito al menos una review.
 
 &nbsp;  
-https://mlopshenry-production.up.railway.app/worstDevByYear/'año'
+https://mlopshenry-production.up.railway.app/worstDevByYear/`año`
 
 Devuelve las tres desarrolladores con con juegos menos recomendados para el año ingresado.
 
 &nbsp;  
-https://mlopshenry-production.up.railway.app/devSentiment/'desarrolladora'
+https://mlopshenry-production.up.railway.app/devSentiment/`desarrolladora`
 
 Devuelve un desglose de los resultados del análisis de sentimiento para la desarrolladora ingresada.
