@@ -5,6 +5,8 @@
 
 El presente es es un proyecto para el bootcamp de Data Science de Henry. En éste se exponen una serie de endpoints que permiten acceder a información sobre usuarios y juegos de la plataforma Steam. Para lograrlo se ha hecho un proceso de ETL sobre los datos de la plataforma, se ha entrenado un modelo de Machine Learning y se ha desplegado una API con FastAPI.
 
+Al ser la segunda entrega del proyecto por haber migrado, decidí sólo agregar los endpoints nuevos pero sin eliminar los que ya no se pedían, para no eliminar funcionalidad sin sentido.
+
 ***
 
 ### Deployment
@@ -52,7 +54,7 @@ Es importante aclarar que sólo se consideraron los usuarios que hayan escrito a
 &nbsp;  
 https://mlopshenry-production.up.railway.app/worstDevByYear/`año`
 
-Devuelve las tres desarrolladores con con juegos menos recomendados para el año ingresado.
+Devuelve las tres desarrolladoras con con juegos menos recomendados para el año ingresado.
 
 &nbsp;  
 https://mlopshenry-production.up.railway.app/devSentiment/`desarrolladora`
