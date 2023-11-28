@@ -224,4 +224,56 @@ def getRecommendations(user : str):
     top_games = df_top_games.sort_values(by=['metascore'], ascending=False).head(5)['title'].values.tolist()
     
     return {"Los 5 juegos recomendados para este usuario son:" :top_games}
+
+@app.get("/worstDevByYear/{year}")
+def UsersWorstDeveloper( year : int ): 
+    """Devuelve el top 3 de desarrolladoras con juegos MENOS recomendados por usuarios para el año dado. (reviews.recommend = False y comentarios negativos)
+    
+    Ejemplo de retorno: [{"Puesto 1" : X}, {"Puesto 2" : Y},{"Puesto 3" : Z}]
+    """
+    
+    #Generamos una lista de los primeros ids de juegos más recomendados para el año dado
+    try:
+        year = int(year)
+    except:
+        return {"Message": "El año ingresado no es válido"}
+    
+    #Agregamos la columna de desarrolladora al dataframe de reseñas, luego creamos columnas para cada categoría de análisis de sentimiento y filtramos por año
+    df_reviews_with_dev = df_reviews.merge(df_games[['developer', 'id']], left_on='item_id', right_on='id').drop(columns=['id'])
+    df_reviews_with_dev = pd.get_dummies(df_reviews_with_dev, columns=['recommend', 'sentiment_analysis'])
+    df_reviews_with_dev = df_reviews_with_dev.loc[df_reviews_with_dev['posted'] == year]
+    
+    
+    df_devs_reviews = df_reviews_with_dev.groupby('developer').sum().reset_index().sort_values(by=['recommend_False', 'sentiment_analysis_0'], ascending=False).head(3)
+    devs = df_devs_reviews['developer'].values.tolist()
+    
+    try:    
+        return [{"Puesto 1": devs[0]}, {"Puesto 2": devs[1]}, {"Puesto 3": devs[2]}]
+    except IndexError:
+        return {"Message": "No hay suficientes datos para el año dado"}
+    
+
+@app.get("/devSentiment/{dev}")
+def sentiment_analysis( dev : str ):
+    """
+    Según la empresa desarrolladora, se devuelve un diccionario con el nombre de la desarrolladora como llave y una lista con la cantidad total de registros 
+    de reseñas de usuarios que se encuentren categorizados con un análisis de sentimiento como valor.
+    
+    Ejemplo de retorno: {'Valve' : [Negative = 182, Neutral = 120, Positive = 278]}
+    """
+    
+    #Agregamos la columna de desarrolladora al dataframe de reseñas, luego creamos columnas para cada categoría de análisis de sentimiento y agrupamos por desarrolladora
+    df_reviews_with_dev = df_reviews.merge(df_games[['developer', 'id']], left_on='item_id', right_on='id').drop(columns=['id'])
+    df_reviews_with_dev = pd.get_dummies(df_reviews_with_dev, columns=['sentiment_analysis'])
+    df_devs_reviews = df_reviews_with_dev.groupby('developer').sum().reset_index()
+    df_devs_reviews['dev_lower'] = df_devs_reviews['developer'].str.lower()
+    
+    if dev.lower() not in df_devs_reviews['dev_lower'].values.tolist():
+        return {"Message": "El género ingresado no existe, la lista de desarrolladoras es: " + str(df_devs_reviews['developer'].values.tolist())}
+    
+    negative = df_devs_reviews.loc[df_devs_reviews['dev_lower'] == dev.lower(), 'sentiment_analysis_0'].values.tolist()[0]
+    neutral = df_devs_reviews.loc[df_devs_reviews['dev_lower'] == dev.lower(), 'sentiment_analysis_1'].values.tolist()[0]
+    positive = df_devs_reviews.loc[df_devs_reviews['dev_lower'] == dev.lower(), 'sentiment_analysis_2'].values.tolist()[0]
+    
+    return {dev : {'Negative': negative, 'Neutral': neutral, 'Positive': positive}}
     
