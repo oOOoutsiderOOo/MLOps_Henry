@@ -5,7 +5,8 @@
 
 El presente es es un proyecto para el bootcamp de Data Science de Henry. En éste se exponen una serie de endpoints que permiten acceder a información sobre usuarios y juegos de la plataforma Steam. Para lograrlo se ha hecho un proceso de ETL sobre los datos de la plataforma, se ha entrenado un modelo de Machine Learning y se ha desplegado una API con FastAPI.
 
-Al ser la segunda entrega del proyecto por haber migrado, decidí sólo agregar los endpoints nuevos pero sin eliminar los que ya no se pedían, para no eliminar funcionalidad sin sentido.
+Al ser la segunda entrega del proyecto por haber migrado, decidí sólo agregar los endpoints nuevos pero sin eliminar los que ya no se pedían, para no eliminar funcionalidad sin sentido. 
+En el video se muestran todos los endpoints también, estando los nuevos al final.
 
 ***
 
