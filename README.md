@@ -48,3 +48,13 @@ https://mlopshenry-production.up.railway.app/recommendByUser/`usuario`
 
 Devuelve los juegos más recomendados para el usuario ingresado. Para ello primero se calculó una matriz de distancia entre usuarios a partir de las reviews realizadas por los mismos. Luego se calculó la distancia entre el usuario ingresado y el resto de los usuarios, y se seleccionaron los 100 primeros juegos de los usuarios mas cercanos. Finalmente se ordenaron por metascore y se devuelven los 5 primeros.
 Es importante aclarar que sólo se consideraron los usuarios que hayan escrito al menos una review.
+
+&nbsp;  
+https://mlopshenry-production.up.railway.app/worstDevByYear/'año'
+
+Devuelve las tres desarrolladores con con juegos menos recomendados para el año ingresado.
+
+&nbsp;  
+https://mlopshenry-production.up.railway.app/devSentiment/'desarrolladora'
+
+Devuelve un desglose de los resultados del análisis de sentimiento para la desarrolladora ingresada.
