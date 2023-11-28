@@ -226,7 +226,7 @@ def getRecommendations(user : str):
     return {"Los 5 juegos recomendados para este usuario son:" :top_games}
 
 @app.get("/worstDevByYear/{year}")
-def UsersWorstDeveloper( year : int ): 
+def UsersWorstDeveloper(year): 
     """Devuelve el top 3 de desarrolladoras con juegos MENOS recomendados por usuarios para el año dado. (reviews.recommend = False y comentarios negativos)
     
     Ejemplo de retorno: [{"Puesto 1" : X}, {"Puesto 2" : Y},{"Puesto 3" : Z}]
@@ -269,7 +269,7 @@ def sentiment_analysis( dev : str ):
     df_devs_reviews['dev_lower'] = df_devs_reviews['developer'].str.lower()
     
     if dev.lower() not in df_devs_reviews['dev_lower'].values.tolist():
-        return {"Message": "El género ingresado no existe, la lista de desarrolladoras es: " + str(df_devs_reviews['developer'].values.tolist())}
+        return {"Message": "El nombre ingresado no existe, la lista de desarrolladoras es: " + str(df_devs_reviews['developer'].values.tolist())}
     
     negative = df_devs_reviews.loc[df_devs_reviews['dev_lower'] == dev.lower(), 'sentiment_analysis_0'].values.tolist()[0]
     neutral = df_devs_reviews.loc[df_devs_reviews['dev_lower'] == dev.lower(), 'sentiment_analysis_1'].values.tolist()[0]
